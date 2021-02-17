@@ -1,5 +1,6 @@
 import {getRandomInteger, getRandomFloat, getUniqueArr, getRandomElement} from './utils.js';
 
+
 const TITLES = [
   'Совдеповская халупа',
   'Роскошная хижина',
@@ -46,9 +47,11 @@ const PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ];
 
+
 const getAuthor = () => {
   return  {avatar: 'img/avatars/user' + 0 + getRandomInteger(0, 8) + '.png'};
 };
+
 
 const getOffer = () => {
   return {
@@ -79,6 +82,7 @@ const getTotalObject = () => {
     offer: getOffer(),
     location: getLocation(),
   }
+
 }
 const getSimilarAnnouncements = () => new Array(1).fill(null).map(() => getTotalObject());
 
