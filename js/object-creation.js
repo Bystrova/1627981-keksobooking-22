@@ -84,6 +84,6 @@ const getTotalObject = () => {
   }
 
 }
-const getSimilarAnnouncements = () => new Array(1).fill(null).map(() => getTotalObject());
+const getSimilarAnnouncements = () => new Array(10).fill(null).map(() => getTotalObject());
 
 export {getSimilarAnnouncements};
