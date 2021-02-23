@@ -35,4 +35,18 @@ const makeImageElement = (tagName, className) => {
   return element;
 };
 
-export {getRandomInteger, getRandomFloat, getUniqueArr, getRandomElement, makeImageElement}
+const getDisabled = (element) => {
+  let elementItems = Array.from(element.children);
+  elementItems.forEach((item) => {
+    item.setAttribute('disabled', 'disabled');
+  })
+};
+
+const getOffDisabled = (element) => {
+  let elementItems = Array.from(element.children);
+  elementItems.forEach((item) => {
+    item.removeAttribute('disabled', 'disabled');
+  })
+};
+
+export {getRandomInteger, getRandomFloat, getUniqueArr, getRandomElement, makeImageElement, getDisabled, getOffDisabled};

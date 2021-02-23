@@ -49,7 +49,7 @@ const PHOTOS = [
 
 
 const getAuthor = () => {
-  return  {avatar: 'img/avatars/user' + 0 + getRandomInteger(0, 8) + '.png'};
+  return  {avatar: 'img/avatars/user' + 0 + getRandomInteger(1, 8) + '.png'};
 };
 
 
