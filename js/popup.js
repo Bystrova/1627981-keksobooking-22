@@ -42,7 +42,7 @@ const makeImageList = (newSimilarElement, announcement) => {
   }
 };
 
-const newPopup = (announcement) => {
+const createPopup = (announcement) => {
   const newSimilarElement = template.cloneNode(true);
   newSimilarElement.querySelector('.popup__title').textContent = announcement.offer.title;
   newSimilarElement.querySelector('.popup__text--address').textContent = announcement.offer.address;
@@ -57,4 +57,4 @@ const newPopup = (announcement) => {
   return newSimilarElement;
 }
 
-export{similarAnnouncements, newPopup};
+export{similarAnnouncements, createPopup};

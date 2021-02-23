@@ -1,5 +1,5 @@
 import {getDisabled, getOffDisabled} from './utils.js';
-import {similarAnnouncements, newPopup} from './popup.js';
+import {similarAnnouncements, createPopup} from './popup.js';
 
 const adForm = document.querySelector('.ad-form');
 const mapFilter = document.querySelector('.map__filters');
@@ -75,7 +75,7 @@ similarAnnouncements.forEach((announcement) => {
 
   simpleMarker
     .addTo(map)
-    .bindPopup(newPopup(announcement));
+    .bindPopup(createPopup(announcement).firstElementChild);
 });
 
 export{map};
