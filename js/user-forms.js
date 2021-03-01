@@ -1,9 +1,13 @@
+import {synchronizeFields} from './utils.js';
+import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm} from './map.js';
+
 const houseType = document.querySelector('#type');
 const price = document.querySelector('#price');
 const checkIn = document.querySelector('#timein');
 const checkOut = document.querySelector('#timeout');
+const adFormReset = document.querySelector('.ad-form__reset');
 
-houseType.addEventListener('change', function(){
+houseType.addEventListener('change', () => {
   price.value = '';
   if(houseType.value === 'bungalow'){
     price.min = 0;
@@ -17,17 +21,20 @@ houseType.addEventListener('change', function(){
   price.placeholder = price.min;
 });
 
-
-const synchronizeFields = (firstField, secondField) => {
-  firstField.addEventListener('change', function(){
-    for (let i = 0; i < firstField.options.length; i++){
-      if(firstField.options[i].selected == true){
-        secondField.options[i].selected = true;
-      }
-    }
-  });
-};
-
 synchronizeFields(checkIn, checkOut);
 synchronizeFields(checkOut, checkIn);
 
+const clearForm = () => {
+  adForm.reset();
+  mapFilter.reset();
+  address.value = primaryCoordinates;
+  mainMarker.setLatLng([primaryCoordinates[0], primaryCoordinates[1]]);
+  map.setView([primaryCoordinates[0], primaryCoordinates[1]], 10);
+};
+
+adFormReset.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  clearForm();
+});
+
+export {clearForm};

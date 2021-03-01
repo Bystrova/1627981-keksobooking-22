@@ -1,9 +1,10 @@
 import {getDisabled, getOffDisabled} from './utils.js';
-import {similarAnnouncements, createPopup} from './popup.js';
+import {createPopup} from './popup.js';
 
 const adForm = document.querySelector('.ad-form');
 const mapFilter = document.querySelector('.map__filters');
 const address = document.querySelector('#address');
+const primaryCoordinates = [35.6894, 139.692]
 
 address.setAttribute('readonly', 'readonly');
 adForm.classList.add('ad-form--disabled');
@@ -19,11 +20,11 @@ const map = L.map('map-canvas')
     mapFilter.classList.remove('map__filters--disabled');
     getOffDisabled(adForm);
     getOffDisabled(mapFilter);
-    address.value = [35.6894, 139.692]
+    address.value = primaryCoordinates;
   })
   .setView({
-    lat: 35.6894,
-    lng: 139.692,
+    lat: primaryCoordinates[0],
+    lng: primaryCoordinates[1],
   }, 10);
 
 L.tileLayer(
@@ -41,8 +42,8 @@ const markerImg = L.icon({
 
 const mainMarker = L.marker(
   {
-    lat: 35.6894,
-    lng: 139.692,
+    lat: primaryCoordinates[0],
+    lng: primaryCoordinates[1],
   },
   {
     draggable: true,
@@ -56,26 +57,28 @@ mainMarker.on('drag', (evt) => {
   address.value = [(coordinates[0]).toFixed(5), (coordinates[1]).toFixed(5)]
 });
 
-similarAnnouncements.forEach((announcement) => {
-  const simpleMarkerImg = L.icon({
-    iconUrl: './img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
+const makeMarkers = (similarAnnouncements) => {
+  similarAnnouncements.forEach((announcement) => {
+    const simpleMarkerImg = L.icon({
+      iconUrl: './img/pin.svg',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+    });
+    const lat = announcement.location.lat;
+    const lng = announcement.location.lng;
+
+    const simpleMarker = L.marker({
+      lat,
+      lng,
+    },
+    {
+      icon: simpleMarkerImg,
+    });
+
+    simpleMarker
+      .addTo(map)
+      .bindPopup(createPopup(announcement).firstElementChild);
   });
-  const lat = announcement.location.x;
-  const lng = announcement.location.y;
+};
 
-  const simpleMarker = L.marker({
-    lat,
-    lng,
-  },
-  {
-    icon: simpleMarkerImg,
-  });
-
-  simpleMarker
-    .addTo(map)
-    .bindPopup(createPopup(announcement).firstElementChild);
-});
-
-export{map};
+export{map, makeMarkers, adForm, address, primaryCoordinates, mapFilter, mainMarker};

@@ -1,9 +1,6 @@
-import {getSimilarAnnouncements} from './object-creation.js';
 import {makeImageElement} from './utils.js';
 
 const template = document.querySelector('#card').content;
-const similarAnnouncements = getSimilarAnnouncements();
-
 const getFeatuersList = (someDocumentElement, announcement) => {
   const listItems = someDocumentElement.querySelectorAll('.popup__feature');
   const featuresList = announcement.offer.features;
@@ -57,4 +54,4 @@ const createPopup = (announcement) => {
   return newSimilarElement;
 }
 
-export{similarAnnouncements, createPopup};
+export{createPopup};
