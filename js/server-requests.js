@@ -1,8 +1,9 @@
-import {makeMarkers, adForm} from './map.js';
-import {showMessage, closeMessageByEsc, closeMessageByClick} from './utils.js';
+import {makeMarkers, adForm, mapFilter} from './map.js';
+import {showMessage, closeMessageByEsc, closeMessageByClick, getOffDisabled} from './utils.js';
 import {clearForm} from './user-forms.js';
 
 const mainContainer = document.querySelector('main');
+const SIMILAR_ANNOUNCEMENT_COUNT = 10;
 
 const showSuccessMessage = () => {
   const successTemplate = document.querySelector('#success').content;
@@ -29,12 +30,15 @@ const showErrorMessage = () => {
   closeMessageByClick(errorMessage);
 };
 
+let announcementsArray;
 
 fetch('https://22.javascript.pages.academy/keksobooking/data')
   .then((response) => {
     if (response.ok){
-      response.json().then ((similarAnnouncements) => {
-        makeMarkers(similarAnnouncements);
+      response.json().then((similarAnnouncements) => {
+        announcementsArray = similarAnnouncements.slice(0, SIMILAR_ANNOUNCEMENT_COUNT);
+        makeMarkers(announcementsArray);
+        getOffDisabled(mapFilter);
       })
     } else {
       showMessage('Не удалось загрузить похожие объявления');
@@ -64,3 +68,5 @@ adForm.addEventListener('submit', (evt) => {
       showErrorMessage();
     })
 });
+
+export {announcementsArray};
