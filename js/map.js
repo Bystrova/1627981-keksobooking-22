@@ -19,7 +19,6 @@ const map = L.map('map-canvas')
     adForm.classList.remove('ad-form--disabled');
     mapFilter.classList.remove('map__filters--disabled');
     getOffDisabled(adForm);
-    getOffDisabled(mapFilter);
     address.value = primaryCoordinates;
   })
   .setView({
@@ -57,6 +56,7 @@ mainMarker.on('drag', (evt) => {
   address.value = [(coordinates[0]).toFixed(5), (coordinates[1]).toFixed(5)]
 });
 
+const markers = [];
 const makeMarkers = (similarAnnouncements) => {
   similarAnnouncements.forEach((announcement) => {
     const simpleMarkerImg = L.icon({
@@ -78,7 +78,10 @@ const makeMarkers = (similarAnnouncements) => {
     simpleMarker
       .addTo(map)
       .bindPopup(createPopup(announcement).firstElementChild);
+
+    markers.push(simpleMarker);
   });
+
 };
 
-export{map, makeMarkers, adForm, address, primaryCoordinates, mapFilter, mainMarker};
+export{map, makeMarkers, adForm, address, primaryCoordinates, mapFilter, mainMarker, markers};

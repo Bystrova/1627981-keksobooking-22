@@ -1,5 +1,6 @@
 import {synchronizeFields} from './utils.js';
-import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm} from './map.js';
+import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm, markers, makeMarkers} from './map.js';
+import {announcementsArray} from './server-requests.js';
 
 const houseType = document.querySelector('#type');
 const price = document.querySelector('#price');
@@ -35,6 +36,20 @@ const clearForm = () => {
 adFormReset.addEventListener('click', (evt) => {
   evt.preventDefault();
   clearForm();
+});
+
+const housingType = mapFilter.querySelector('#housing-type');
+housingType.addEventListener('change', () => {
+  markers.forEach((marker) => {
+    marker.remove();
+  });
+  if (housingType.value !== 'any'){
+    const sortedSimilarAnnouncements = announcementsArray.filter(announcement => announcement.offer.type === housingType.value);
+    makeMarkers(sortedSimilarAnnouncements);
+  } else {
+    makeMarkers(announcementsArray);
+  }
+
 });
 
 export {clearForm};
