@@ -1,6 +1,6 @@
 import {makeMarkers, adForm, mapFilter} from './map.js';
 import {showMessage, closeMessageByEsc, closeMessageByClick, getOffDisabled} from './utils.js';
-import {clearForm} from './user-forms.js';
+import {clearForm, checkCorrectChoice} from './user-forms.js';
 
 const mainContainer = document.querySelector('main');
 const SIMILAR_ANNOUNCEMENT_COUNT = 10;
@@ -47,26 +47,28 @@ fetch('https://22.javascript.pages.academy/keksobooking/data')
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  const formData = new FormData(evt.target);
-  fetch(
-    'https://22.javascript.pages.academy/keksobooking',
-    {
-      method: 'POST',
-      body: formData,
-    },
-  )
-    .then((response) => {
-      if(response.ok){
-        showSuccessMessage();
-        clearForm();
-      } else {
-        showErrorMessage();
-      }
+  if (checkCorrectChoice()){
+    const formData = new FormData(evt.target);
+    fetch(
+      'https://22.javascript.pages.academy/keksobooking',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    )
+      .then((response) => {
+        if(response.ok){
+          showSuccessMessage();
+          clearForm();
+        } else {
+          showErrorMessage();
+        }
 
-    })
-    .catch(() => {
-      showErrorMessage();
-    })
+      })
+      .catch(() => {
+        showErrorMessage();
+      })
+  }
 });
 
 export {announcementsArray};
