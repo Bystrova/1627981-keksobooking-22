@@ -1,6 +1,6 @@
-import {synchronizeFields} from './utils.js';
+import {synchronizeFields, closeMessageByEsc, closeMessageByClick} from './utils.js';
 import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm, markers, makeMarkers} from './map.js';
-import {announcementsArray} from './server-requests.js';
+import {announcementsArray, sendData} from './server-requests.js';
 
 const houseType = document.querySelector('#type');
 const price = document.querySelector('#price');
@@ -9,9 +9,9 @@ const checkOut = document.querySelector('#timeout');
 const adFormReset = document.querySelector('.ad-form__reset');
 const capacity = document.querySelector('#capacity');
 const roomNumber = document.querySelector('#room_number');
-const title = document.querySelector('#title');
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
+const mainContainer = document.querySelector('main');
+
+
 
 houseType.addEventListener('change', () => {
   price.value = '';
@@ -30,6 +30,31 @@ houseType.addEventListener('change', () => {
 synchronizeFields(checkIn, checkOut);
 synchronizeFields(checkOut, checkIn);
 
+const showSuccessMessage = () => {
+  const successTemplate = document.querySelector('#success').content;
+  const successMessageContainer = successTemplate.querySelector('.success');
+  const successMessage = successMessageContainer.cloneNode(true);
+  successMessage.style.zIndex = 1000;
+  mainContainer.append(successMessage);
+  closeMessageByEsc(successMessage);
+  closeMessageByClick(successMessage);
+};
+
+const showErrorMessage = () => {
+  const errorTemplate = document.querySelector('#error').content;
+  const errorMessageContainer = errorTemplate.querySelector('.error');
+  const errorMessage = errorMessageContainer.cloneNode(true);
+  const errorButton = errorMessage.querySelector('.error__button');
+  errorMessage.style.zIndex = 1000;
+  mainContainer.append(errorMessage);
+
+  errorButton.addEventListener('click', () => {
+    errorMessage.remove();
+  });
+  closeMessageByEsc(errorMessage);
+  closeMessageByClick(errorMessage);
+};
+
 const clearForm = () => {
   adForm.reset();
   mapFilter.reset();
@@ -37,6 +62,11 @@ const clearForm = () => {
   mainMarker.setLatLng([primaryCoordinates[0], primaryCoordinates[1]]);
   map.setView([primaryCoordinates[0], primaryCoordinates[1]], 10);
 };
+
+const showMessageAndClear = () => {
+  showSuccessMessage();
+  clearForm();
+}
 
 adFormReset.addEventListener('click', (evt) => {
   evt.preventDefault();
@@ -57,18 +87,6 @@ housingType.addEventListener('change', () => {
 
 });
 
-title.addEventListener('input', () => {
-  const valueLength = title.value.length;
-  if (valueLength < MIN_TITLE_LENGTH){
-    title.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) + ' симв.');
-  } else if (valueLength > MAX_TITLE_LENGTH) {
-    title.setCustomValidity('Удалите лишние ' + (MAX_TITLE_LENGTH - valueLength) + ' симв.')
-  } else {
-    title.setCustomValidity('');
-  }
-  title.reportValidity();
-});
-
 const checkCorrectChoice = () => {
   let result = true;
   if(roomNumber.value === '1' && capacity.value !== '1'){
@@ -82,16 +100,27 @@ const checkCorrectChoice = () => {
   } else {
     capacity.setCustomValidity('');
   }
+  capacity.reportValidity();
   return result;
 };
 
 const checkCapacity = (userField) => {
   userField.addEventListener('click', () => {
-    checkCorrectChoice();
+    capacity.setCustomValidity('');
   })
 };
-
 checkCapacity(capacity);
 checkCapacity(roomNumber);
 
-export {clearForm, checkCorrectChoice};
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  if (checkCorrectChoice()) {
+    const formData = new FormData(evt.target);
+    sendData(
+      () => showMessageAndClear(),
+      () => showErrorMessage(),
+      formData);
+  }
+});
+
+export {clearForm};
