@@ -1,7 +1,7 @@
 import {makeMarkers, mapFilter} from './map.js';
 import {showMessage, getOffDisabled} from './utils.js';
 
-const SIMILAR_ANNOUNCEMENT_COUNT = 10;
+
 
 let announcementsArray;
 
@@ -9,7 +9,7 @@ fetch('https://22.javascript.pages.academy/keksobooking/data')
   .then((response) => {
     if (response.ok){
       response.json().then((similarAnnouncements) => {
-        announcementsArray = similarAnnouncements.slice(0, SIMILAR_ANNOUNCEMENT_COUNT);
+        announcementsArray = similarAnnouncements;
         makeMarkers(announcementsArray);
         getOffDisabled(mapFilter);
       })
