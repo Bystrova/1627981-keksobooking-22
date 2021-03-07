@@ -92,7 +92,7 @@ const closeMessageByEsc = (message) => {
 };
 
 const closeMessageByClick = (message) => {
-  document.addEventListener('click', () =>{
+  document.addEventListener('click', () => {
     message.remove();
   });
 };
