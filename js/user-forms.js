@@ -110,15 +110,19 @@ const sortAnnouncements = (announcementA, announcementB) => {
   return rankB - rankA;
 };
 
-mapFilter.addEventListener('change', (evt) => {
+const makeMarkersDebounce = _.debounce((evt) => {
   if (evt.target.classList.contains('map__filter') || evt.target.classList.contains('map__checkbox')){
     const sortedArray = announcementsArray
       .slice()
       .sort(sortAnnouncements)
       .slice(0, SIMILAR_ANNOUNCEMENT_COUNT);
 
-    _.debounce(() => makeMarkers(sortedArray), MAKE_MARKERS_DELAY);
+    makeMarkers(sortedArray);
   }
+}, MAKE_MARKERS_DELAY);
+
+mapFilter.addEventListener('change', (evt) => {
+  makeMarkersDebounce(evt);
 });
 
 const checkCorrectChoice = () => {
