@@ -1,7 +1,7 @@
-/* global _:readonly */
+
 import {synchronizeFields, closeMessageByEsc, closeMessageByClick} from './utils.js';
-import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm, makeMarkers} from './map.js';
-import {announcementsArray, sendData} from './server-requests.js';
+import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm} from './map.js';
+import {sendData} from './server-requests.js';
 
 const houseType = document.querySelector('#type');
 const price = document.querySelector('#price');
@@ -11,13 +11,6 @@ const adFormReset = document.querySelector('.ad-form__reset');
 const capacity = document.querySelector('#capacity');
 const roomNumber = document.querySelector('#room_number');
 const mainContainer = document.querySelector('main');
-const housingType = mapFilter.querySelector('#housing-type');
-const housingPrice = document.querySelector('#housing-price');
-const housingRooms = document.querySelector('#housing-rooms');
-const housingGuests = document.querySelector('#housing-guests');
-const SIMILAR_ANNOUNCEMENT_COUNT = 10;
-const MAKE_MARKERS_DELAY = 500;
-
 
 houseType.addEventListener('change', () => {
   price.value = '';
@@ -77,52 +70,6 @@ const showMessageAndClear = () => {
 adFormReset.addEventListener('click', (evt) => {
   evt.preventDefault();
   clearForm();
-});
-
-const getRank = (announcement) => {
-  const prices = {low: {max: 10000}, middle: {min: 10000, max: 50000}, high: {min: 50000}, any: {min: 0}};
-  const priceInterval = prices[housingPrice.value];
-  let rank = 0;
-  if(announcement.offer.type === housingType.value){
-    rank += 5;
-  }
-  if(announcement.offer.price >= priceInterval.min && announcement.offer.price <= priceInterval.max) {
-    rank += 4;
-  }
-  if(announcement.offer.rooms.toString() === housingRooms.value) {
-    rank += 3;
-  }
-  if(announcement.offer.guests.toString() === housingGuests.value) {
-    rank += 2;
-  }
-  const checkedCheckboxes = Array.from(document.querySelectorAll('.map__checkbox:checked'));
-  checkedCheckboxes.forEach((checkbox) => {
-    if (announcement.offer.features.includes(checkbox.value, 0)) {
-      rank += 1;
-    }
-  });
-  return rank;
-};
-
-const sortAnnouncements = (announcementA, announcementB) => {
-  const rankA = getRank(announcementA);
-  const rankB = getRank(announcementB);
-  return rankB - rankA;
-};
-
-const makeMarkersDebounce = _.debounce((evt) => {
-  if (evt.target.classList.contains('map__filter') || evt.target.classList.contains('map__checkbox')){
-    const sortedArray = announcementsArray
-      .slice()
-      .sort(sortAnnouncements)
-      .slice(0, SIMILAR_ANNOUNCEMENT_COUNT);
-
-    makeMarkers(sortedArray);
-  }
-}, MAKE_MARKERS_DELAY);
-
-mapFilter.addEventListener('change', (evt) => {
-  makeMarkersDebounce(evt);
 });
 
 const checkCorrectChoice = () => {
