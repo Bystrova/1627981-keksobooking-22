@@ -58,6 +58,9 @@ mainMarker.on('drag', (evt) => {
 
 const markers = [];
 const makeMarkers = (similarAnnouncements) => {
+  markers.forEach((marker) => {
+    marker.remove();
+  });
   similarAnnouncements.forEach((announcement) => {
     const simpleMarkerImg = L.icon({
       iconUrl: './img/pin.svg',

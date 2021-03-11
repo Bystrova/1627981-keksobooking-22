@@ -1,6 +1,7 @@
+
 import {synchronizeFields, closeMessageByEsc, closeMessageByClick} from './utils.js';
-import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm, markers, makeMarkers} from './map.js';
-import {announcementsArray, sendData} from './server-requests.js';
+import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm} from './map.js';
+import {sendData} from './server-requests.js';
 
 const houseType = document.querySelector('#type');
 const price = document.querySelector('#price');
@@ -10,8 +11,6 @@ const adFormReset = document.querySelector('.ad-form__reset');
 const capacity = document.querySelector('#capacity');
 const roomNumber = document.querySelector('#room_number');
 const mainContainer = document.querySelector('main');
-
-
 
 houseType.addEventListener('change', () => {
   price.value = '';
@@ -73,20 +72,6 @@ adFormReset.addEventListener('click', (evt) => {
   clearForm();
 });
 
-const housingType = mapFilter.querySelector('#housing-type');
-housingType.addEventListener('change', () => {
-  markers.forEach((marker) => {
-    marker.remove();
-  });
-  if (housingType.value !== 'any'){
-    const sortedSimilarAnnouncements = announcementsArray.filter(announcement => announcement.offer.type === housingType.value);
-    makeMarkers(sortedSimilarAnnouncements);
-  } else {
-    makeMarkers(announcementsArray);
-  }
-
-});
-
 const checkCorrectChoice = () => {
   let result = true;
   if(roomNumber.value === '1' && capacity.value !== '1'){
@@ -105,7 +90,7 @@ const checkCorrectChoice = () => {
 };
 
 const checkCapacity = (userField) => {
-  userField.addEventListener('click', () => {
+  userField.addEventListener('change', () => {
     capacity.setCustomValidity('');
   })
 };
