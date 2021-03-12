@@ -11,6 +11,9 @@ const adFormReset = document.querySelector('.ad-form__reset');
 const capacity = document.querySelector('#capacity');
 const roomNumber = document.querySelector('#room_number');
 const mainContainer = document.querySelector('main');
+const avatarChooser = document.querySelector('.ad-form-header__input');
+const photoChooser = document.querySelector('.ad-form__input');
+const FILE_TYPES = ['gif', 'jpeg', 'jpg', 'png'];
 
 houseType.addEventListener('change', () => {
   price.value = '';
@@ -96,6 +99,25 @@ const checkCapacity = (userField) => {
 };
 checkCapacity(capacity);
 checkCapacity(roomNumber);
+
+const changePhoto = (photoInput) => {
+  photoInput.addEventListener('change', () => {
+    const file = photoInput.files[0];
+    const fileName = file.name.toLowerCase();
+    const matches = FILE_TYPES.some((format) => {
+      return fileName.endsWith(format);
+    });
+    if(!matches) {
+      photoInput.setCustomValidity('Загрузите изображение');
+    } else {
+      photoInput.setCustomValidity('');
+    }
+    photoInput.reportValidity();
+  });
+};
+
+changePhoto(avatarChooser);
+changePhoto(photoChooser);
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
