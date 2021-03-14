@@ -2,12 +2,14 @@
 import {makeMarkers, mapFilter} from './map.js';
 import {announcementsArray} from './server-requests.js';
 
+const SIMILAR_ANNOUNCEMENT_COUNT = 10;
+const MAKE_MARKERS_DELAY = 500;
+
 const housingType = mapFilter.querySelector('#housing-type');
 const housingPrice = document.querySelector('#housing-price');
 const housingRooms = document.querySelector('#housing-rooms');
 const housingGuests = document.querySelector('#housing-guests');
-const SIMILAR_ANNOUNCEMENT_COUNT = 10;
-const MAKE_MARKERS_DELAY = 500;
+
 const prices = {low: {min: 0, max: 10000}, middle: {min: 10000, max: 50000}, high: {min: 50000, max: 100500000000}};
 
 const isChoosen = (announcement) => {

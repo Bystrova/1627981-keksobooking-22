@@ -1,34 +1,3 @@
-const getRandomInteger = (firstIndex, secondIndex) => {
-  let randomIndex = Math.floor(Math.random()*(secondIndex - firstIndex + 1) + firstIndex);
-  if (secondIndex - firstIndex < 0){
-    return 'Диапазон может быть только положительным';
-  }
-  return randomIndex;
-}
-
-const getRandomFloat = (firstNumber, secondNumber, decimalPoint) => {
-  let randomNumber = Math.random()*(secondNumber - firstNumber) + firstNumber;
-  if (secondNumber - firstNumber < 0){
-    return 'Диапазон может быть только положительным';
-  }
-  return Number(randomNumber.toFixed(decimalPoint));
-}
-
-const getUniqueArr = (someArray) => {
-  let uniqueArr = [];
-  for (let i=0; i <= getRandomInteger(0, someArray.length-1); i++){
-    let uniqueIndex = getRandomInteger(0, someArray.length-1);
-    if (uniqueArr.indexOf(someArray[uniqueIndex]) == -1){
-      uniqueArr.push(someArray[uniqueIndex]);
-    }
-  }
-  return uniqueArr;
-};
-
-const getRandomElement = (elements) => {
-  return elements[getRandomInteger(0, elements.length-1)];
-};
-
 const makeImageElement = (tagName, className) => {
   const element = document.createElement(tagName);
   element.classList.add(className);
@@ -52,7 +21,7 @@ const getOffDisabled = (element) => {
 const synchronizeFields = (firstField, secondField) => {
   firstField.addEventListener('change', () => {
     for (let i = 0; i < firstField.options.length; i++){
-      if(firstField.options[i].selected == true){
+      if(firstField.options[i].selected === true){
         secondField.options[i].selected = true;
       }
     }
@@ -97,5 +66,4 @@ const closeMessageByClick = (message) => {
   });
 };
 
-export {getRandomInteger, getRandomFloat, getUniqueArr, getRandomElement, makeImageElement, getDisabled, getOffDisabled,
-  showMessage, closeMessageByClick, closeMessageByEsc, synchronizeFields};
+export {makeImageElement, getDisabled, getOffDisabled, showMessage, closeMessageByClick, closeMessageByEsc, synchronizeFields};

@@ -7,7 +7,7 @@ const getFeatuersList = (someDocumentElement, announcement) => {
   for (let i=0; i < listItems.length; i++){
     let secondClassName = listItems[i].classList[1];
 
-    if (featuresList.indexOf(secondClassName.substr(16)) == -1) {
+    if (featuresList.indexOf(secondClassName.substr(16)) === -1) {
       listItems[i].remove();
     }
   }
