@@ -3,6 +3,8 @@ import {synchronizeFields, closeMessageByEsc, closeMessageByClick} from './utils
 import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm} from './map.js';
 import {sendData} from './server-requests.js';
 
+const FILE_TYPES = ['gif', 'jpeg', 'jpg', 'png'];
+
 const houseType = document.querySelector('#type');
 const price = document.querySelector('#price');
 const checkIn = document.querySelector('#timein');
@@ -13,7 +15,6 @@ const roomNumber = document.querySelector('#room_number');
 const mainContainer = document.querySelector('main');
 const avatarChooser = document.querySelector('.ad-form-header__input');
 const photoChooser = document.querySelector('.ad-form__input');
-const FILE_TYPES = ['gif', 'jpeg', 'jpg', 'png'];
 
 houseType.addEventListener('change', () => {
   price.value = '';
@@ -107,7 +108,7 @@ const changePhoto = (photoInput) => {
     const matches = FILE_TYPES.some((format) => {
       return fileName.endsWith(format);
     });
-    if(!matches) {
+    if(!matches && FILE_TYPES !== 0) {
       photoInput.setCustomValidity('Загрузите изображение');
     } else {
       photoInput.setCustomValidity('');

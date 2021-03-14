@@ -1,8 +1,6 @@
 import {makeMarkers, mapFilter} from './map.js';
 import {showMessage, getOffDisabled} from './utils.js';
 
-
-
 let announcementsArray;
 
 fetch('https://22.javascript.pages.academy/keksobooking/data')
