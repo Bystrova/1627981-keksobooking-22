@@ -51,19 +51,22 @@ const showMessage = (message) => {
   }, 3000);
 };
 
-const closeMessageByEsc = (message) => {
-  document.addEventListener('keydown', (evt) => {
+const closeMessage = (message) => {
+  const onEscKeydown = (evt) => {
     if(evt.key === ('Escape' || 'Esc')){
       evt.preventDefault();
       message.remove();
+      document.removeEventListener('keydown', onEscKeydown);
+      document.removeEventListener('click', onClick);
     }
-  });
-};
-
-const closeMessageByClick = (message) => {
-  document.addEventListener('click', () => {
+  };
+  const onClick = () => {
     message.remove();
-  });
+    document.removeEventListener('click', onClick);
+    document.removeEventListener('keydown', onEscKeydown);
+  };
+  document.addEventListener('click', onClick);
+  document.addEventListener('keydown', onEscKeydown);
 };
 
-export {makeImageElement, getDisabled, getOffDisabled, showMessage, closeMessageByClick, closeMessageByEsc, synchronizeFields};
+export {makeImageElement, getDisabled, getOffDisabled, showMessage, synchronizeFields, closeMessage};

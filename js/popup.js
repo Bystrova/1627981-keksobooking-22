@@ -1,5 +1,12 @@
 import {makeImageElement} from './utils.js';
 
+const accomodationData = {
+  firstItem: {type: 'bungalow', name: 'Бунгало', minPrice: 0},
+  secondItem: {type: 'flat', name: 'Квартира', minPrice: 1000},
+  thirdItem: {type: 'house', name: 'Дом', minPrice: 5000},
+  fourthItem: {type: 'palace', name:'Дворец', minPrice: 10000},
+};
+
 const template = document.querySelector('#card').content;
 const getFeatuersList = (someDocumentElement, announcement) => {
   const listItems = someDocumentElement.querySelectorAll('.popup__feature');
@@ -15,14 +22,14 @@ const getFeatuersList = (someDocumentElement, announcement) => {
 
 const getType = (announcement) => {
   switch(announcement.offer.type){
-    case 'flat':
-      return 'Квартира';
     case 'bungalow':
-      return 'Бунгало';
+      return accomodationData.firstItem.name;
+    case 'flat':
+      return accomodationData.secondItem.name;
     case 'house':
-      return 'Дом';
+      return accomodationData.thirdItem.name;
     case 'palace':
-      return 'Дворец';
+      return accomodationData.fourthItem.name;
   }
 };
 
@@ -54,4 +61,4 @@ const createPopup = (announcement) => {
   return newSimilarElement;
 }
 
-export{createPopup};
+export{createPopup, accomodationData};

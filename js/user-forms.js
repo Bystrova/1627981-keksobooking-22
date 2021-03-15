@@ -1,9 +1,9 @@
 
-import {synchronizeFields, closeMessageByEsc, closeMessageByClick} from './utils.js';
+import {synchronizeFields, closeMessage} from './utils.js';
 import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm} from './map.js';
 import {sendData} from './server-requests.js';
-
-const FILE_TYPES = ['gif', 'jpeg', 'jpg', 'png'];
+import {accomodationData} from './popup.js';
+import {photoPreview, headerPreview} from './photo-loading.js';
 
 const houseType = document.querySelector('#type');
 const price = document.querySelector('#price');
@@ -13,19 +13,18 @@ const adFormReset = document.querySelector('.ad-form__reset');
 const capacity = document.querySelector('#capacity');
 const roomNumber = document.querySelector('#room_number');
 const mainContainer = document.querySelector('main');
-const avatarChooser = document.querySelector('.ad-form-header__input');
-const photoChooser = document.querySelector('.ad-form__input');
+const defaultPicture = headerPreview.src;
+
 
 houseType.addEventListener('change', () => {
-  price.value = '';
-  if(houseType.value === 'bungalow'){
-    price.min = 0;
-  } else if(houseType.value === 'flat') {
-    price.min = 1000;
-  } else if(houseType.value === 'house') {
-    price.min = 5000;
-  } else if(houseType.value === 'palace') {
-    price.min = 10000;
+  if(houseType.value === accomodationData.firstItem.type){
+    price.setAttribute('min', accomodationData.firstItem.minPrice);
+  } else if(houseType.value === accomodationData.secondItem.type) {
+    price.setAttribute('min', accomodationData.secondItem.minPrice);
+  } else if(houseType.value === accomodationData.thirdItem.type) {
+    price.setAttribute('min', accomodationData.thirdItem.minPrice);
+  } else if(houseType.value === accomodationData.fourthItem.type) {
+    price.setAttribute('min', accomodationData.fourthItem.minPrice);
   }
   price.placeholder = price.min;
 });
@@ -39,8 +38,7 @@ const showSuccessMessage = () => {
   const successMessage = successMessageContainer.cloneNode(true);
   successMessage.style.zIndex = 1000;
   mainContainer.append(successMessage);
-  closeMessageByEsc(successMessage);
-  closeMessageByClick(successMessage);
+  closeMessage(successMessage);
 };
 
 const showErrorMessage = () => {
@@ -54,8 +52,7 @@ const showErrorMessage = () => {
   errorButton.addEventListener('click', () => {
     errorMessage.remove();
   });
-  closeMessageByEsc(errorMessage);
-  closeMessageByClick(errorMessage);
+  closeMessage(errorMessage);
 };
 
 const clearForm = () => {
@@ -64,6 +61,8 @@ const clearForm = () => {
   address.value = primaryCoordinates;
   mainMarker.setLatLng([primaryCoordinates[0], primaryCoordinates[1]]);
   map.setView([primaryCoordinates[0], primaryCoordinates[1]], 10);
+  photoPreview.innerHTML = '';
+  headerPreview.src = defaultPicture;
 };
 
 const showMessageAndClear = () => {
@@ -100,25 +99,6 @@ const checkCapacity = (userField) => {
 };
 checkCapacity(capacity);
 checkCapacity(roomNumber);
-
-const changePhoto = (photoInput) => {
-  photoInput.addEventListener('change', () => {
-    const file = photoInput.files[0];
-    const fileName = file.name.toLowerCase();
-    const matches = FILE_TYPES.some((format) => {
-      return fileName.endsWith(format);
-    });
-    if(!matches && FILE_TYPES !== 0) {
-      photoInput.setCustomValidity('Загрузите изображение');
-    } else {
-      photoInput.setCustomValidity('');
-    }
-    photoInput.reportValidity();
-  });
-};
-
-changePhoto(avatarChooser);
-changePhoto(photoChooser);
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
