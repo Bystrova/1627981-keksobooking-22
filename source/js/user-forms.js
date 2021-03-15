@@ -1,7 +1,7 @@
 
 import {synchronizeFields, closeMessage} from './utils.js';
-import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm} from './map.js';
-import {sendData} from './server-requests.js';
+import {address, mainMarker, primaryCoordinates, mapFilter, map, adForm, makeMarkers} from './map.js';
+import {sendData, announcementsArray} from './server-requests.js';
 import {accomodationData} from './popup.js';
 import {photoPreview, headerPreview} from './photo-loading.js';
 
@@ -63,6 +63,7 @@ const clearForm = () => {
   map.setView([primaryCoordinates[0], primaryCoordinates[1]], 10);
   photoPreview.innerHTML = '';
   headerPreview.src = defaultPicture;
+  makeMarkers(announcementsArray);
 };
 
 const showMessageAndClear = () => {
